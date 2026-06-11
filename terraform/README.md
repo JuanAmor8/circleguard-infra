@@ -33,7 +33,7 @@ terraform/
    ```
 2. **Terraform** >= 1.0 instalado.
 3. Permisos de **Contributor** en la suscripción de Azure.
-4. (Opcional) Acceso a Azure desde Jenkins si se automatiza.
+4. (Opcional) Service Principal de Azure para automatizar desde GitHub Actions.
 
 ## Pasos de configuración (una sola vez)
 
@@ -89,7 +89,7 @@ terraform apply -var-file=envs/stage.tfvars
 terraform apply -var-file=envs/prod.tfvars
 ```
 
-## Obtener kubeconfig para kubectl/Jenkins
+## Obtener kubeconfig para kubectl/GitHub Actions
 
 Después de crear un cluster, obtén sus credenciales:
 
@@ -120,7 +120,7 @@ export KUBECONFIG=$(pwd)/kubeconfig-dev.yaml
 kubectl get nodes
 ```
 
-**Para Jenkins**: guarda los archivos `kubeconfig-*.yaml` como credenciales secretas y configura los pipelines para usar el archivo correspondiente mediante la variable `KUBECONFIG`.
+**Para GitHub Actions**: codifica cada archivo en base64 (`base64 -w0 kubeconfig-dev.yaml`) y guárdalo como GitHub Secret (`KUBE_CONFIG_DEV`, `KUBE_CONFIG_STAGE`, `KUBE_CONFIG_PROD`); los workflows de CD lo decodifican a `~/.kube/config` antes de `kubectl apply`.
 
 ## Destruir recursos
 

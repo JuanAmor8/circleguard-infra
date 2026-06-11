@@ -14,7 +14,7 @@ circleguard-infra/
 ├── k8s/
 │   ├── namespaces/   # circleguard-dev / -stage / -master
 │   ├── dev/          # 8 servicios + datastores (Postgres, Kafka, Neo4j, Redis, OpenLDAP) + SealedSecrets
-│   ├── stage/        # 8 servicios + datastores (emptyDir) — secrets vía envsubst desde Jenkins
+│   ├── stage/        # 8 servicios + datastores (emptyDir) — secrets vía envsubst desde GitHub Secrets
 │   ├── master/       # 8 servicios con HPA + datastores -prod con PVC + ingress TLS + observabilidad
 │   ├── mesh/         # Demo Linkerd: canary 90/10, retries, circuit breaking
 │   └── dr/           # Velero backup schedule (multi-cloud DR)
@@ -26,14 +26,16 @@ circleguard-infra/
 
 ## Cómo lo consumen los pipelines
 
-Los `Jenkinsfile-{dev,stage,master}` viven en el repo de aplicación (necesitan el código fuente para `gradle build` y `docker build`). En sus stages de **Deploy** hacen un segundo checkout de este repositorio en el directorio `infra/` y aplican los manifests:
+Los workflows de CD (`.github/workflows/cd-dev.yml`, `cd-stage.yml` y el job `deploy-prod` de `ci.yml`) viven en el repo de aplicación (necesitan el código fuente para `gradle build` y `docker build`). En sus jobs de **Deploy** hacen un segundo checkout de este repositorio en el directorio `infra/` y aplican los manifests:
 
-```groovy
-stage('Checkout Infra') {
-    steps { dir('infra') { git url: env.INFRA_REPO, branch: env.INFRA_BRANCH } }
-}
-// ...
-sh 'kubectl apply -f infra/k8s/master/ -n circleguard-master'
+```yaml
+- name: Checkout infra repo
+  uses: actions/checkout@v4
+  with:
+    repository: JuanAmor8/circleguard-infra
+    path: infra
+# ...
+- run: kubectl apply -f infra/k8s/master/
 ```
 
 ## Gestión de secretos
@@ -41,7 +43,7 @@ sh 'kubectl apply -f infra/k8s/master/ -n circleguard-master'
 | Ambiente | Mecanismo | Razón |
 |---|---|---|
 | dev | **Sealed Secrets** (`k8s/dev/sealed-secrets.yaml`) | Antes los secrets dev estaban en base64 plano en git; ahora se commitea solo el secreto cifrado con la clave pública del controller. |
-| stage / master | **Templates envsubst** (`k8s/{stage,master}/secrets.yaml`) | Los valores vienen de Jenkins `credentials()` en tiempo de deploy y nunca tocan git. Convertirlos a SealedSecrets acoplaría el repo a la clave de un cluster específico y rompería la rotación de credenciales vía Jenkins. |
+| stage / master | **Templates envsubst** (`k8s/{stage,master}/secrets.yaml`) | Los valores vienen de GitHub Secrets (`STAGE_*`/`PROD_*`) en tiempo de deploy y nunca tocan git. Convertirlos a SealedSecrets acoplaría el repo a la clave de un cluster específico y rompería la rotación de credenciales vía GitHub Environments. |
 
 ### Sealed Secrets — instalación y sellado
 
