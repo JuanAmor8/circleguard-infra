@@ -47,7 +47,7 @@ resource "azurerm_container_registry" "acr" {
 
 # locals: primer nodepool para default_node_pool
 locals {
-  first_pool = var.nodepools[0]
+  first_pool       = var.nodepools[0]
   additional_pools = slice(var.nodepools, 1, length(var.nodepools))
 }
 

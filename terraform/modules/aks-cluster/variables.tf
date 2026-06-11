@@ -28,18 +28,18 @@ variable "kubernetes_version" {
 variable "nodepools" {
   description = "Lista de nodepools a crear (objetos con name, vm_size, node_count, min_count, max_count, enable_auto_scaling, etc.)"
   type = list(object({
-    name                 = string
-    vm_size              = string
-    node_count           = number
-    min_count            = number
-    max_count            = number
-    enable_auto_scaling  = bool
-    os_disk_type         = string
-    os_disk_size_gb      = number
-    priority             = optional(string)
-    eviction_policy      = optional(string)
+    name                = string
+    vm_size             = string
+    node_count          = number
+    min_count           = number
+    max_count           = number
+    enable_auto_scaling = bool
+    os_disk_type        = string
+    os_disk_size_gb     = number
+    priority            = optional(string)
+    eviction_policy     = optional(string)
     # FinOps: precio máximo para nodos Spot (-1 = precio de mercado, hasta -90%)
-    spot_max_price       = optional(number)
+    spot_max_price = optional(number)
   }))
 }
 
