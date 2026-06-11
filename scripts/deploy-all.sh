@@ -40,7 +40,18 @@ echo "[4/8] Desplegando ConfigMaps y Secrets..."
 for f in k8s/dev/configmap-*.yaml; do
     kubectl apply -f "$f" -n $NAMESPACE
 done
-kubectl apply -f k8s/dev/secrets.yaml -n $NAMESPACE
+# Secrets via Sealed Secrets (requiere controller instalado en el cluster)
+if ! kubectl get deployment sealed-secrets -n kube-system >/dev/null 2>&1; then
+    echo "     [ERROR] Controller sealed-secrets no instalado."
+    echo "     Instala: helm install sealed-secrets sealed-secrets/sealed-secrets -n kube-system"
+    exit 1
+fi
+if [ ! -f k8s/dev/sealed-secrets.yaml ]; then
+    echo "     [ERROR] k8s/dev/sealed-secrets.yaml no existe."
+    echo "     Genera con: ./scripts/seal-dev-secrets.sh"
+    exit 1
+fi
+kubectl apply -f k8s/dev/sealed-secrets.yaml -n $NAMESPACE
 echo "     [OK] ConfigMaps y Secrets desplegados"
 echo ""
 

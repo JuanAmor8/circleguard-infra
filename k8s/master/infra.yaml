@@ -26,8 +26,8 @@ spec:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: db-credentials
-              key: password
+              name: circleguard-secrets
+              key: DB_PASSWORD
         resources:
           requests:
             memory: "512Mi"
