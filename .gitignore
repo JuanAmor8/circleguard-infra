@@ -1,0 +1,19 @@
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfplan
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Secrets (never commit plain secrets)
+*.pem.key
+secrets-local.yaml
+
+# OS
+Thumbs.db
+.DS_Store
