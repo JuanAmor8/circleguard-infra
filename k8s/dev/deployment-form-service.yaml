@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: form-service
-        image: stixk/circleguard-form-service:latest
+        image: stixk/circleguard-form-service:dev-latest
         ports:
         - containerPort: 8086
         envFrom:

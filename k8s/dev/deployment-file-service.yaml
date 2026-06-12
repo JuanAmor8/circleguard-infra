@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: file-service
-        image: stixk/circleguard-file-service:latest
+        image: stixk/circleguard-file-service:dev-latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8085

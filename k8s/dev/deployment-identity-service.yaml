@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: identity-service
-        image: stixk/circleguard-identity-service:latest
+        image: stixk/circleguard-identity-service:dev-latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8083
