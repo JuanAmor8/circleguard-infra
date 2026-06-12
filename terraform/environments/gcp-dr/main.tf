@@ -12,10 +12,10 @@ module "gke" {
   nodepools = [
     {
       name                = "default"
-      machine_type        = "e2-medium"
+      machine_type        = "e2-medium" # shared-core: ~940m allocatable/nodo
       node_count          = 2
       min_count           = 1
-      max_count           = 3
+      max_count           = 5 # 13 pods no caben en 3 nodos shared-core
       enable_auto_scaling = true
       disk_size_gb        = 50
       spot                = true # FinOps: spot GCP (~ -80/91%)
