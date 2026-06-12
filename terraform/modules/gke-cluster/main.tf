@@ -8,9 +8,11 @@ resource "google_compute_network" "vpc" {
 }
 
 resource "google_compute_subnetwork" "nodes" {
-  name          = "${var.cluster_name}-subnet"
+  name = "${var.cluster_name}-subnet"
+  # var.region puede ser una zona (us-central1-a) para clusters zonales; la
+  # subnet exige región, así que se quita el sufijo de zona si lo trae.
   network       = google_compute_network.vpc.id
-  region        = var.region
+  region        = replace(var.region, "/-[a-z]$/", "")
   ip_cidr_range = var.vpc_cidr
 }
 
