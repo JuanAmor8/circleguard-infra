@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: gateway-service
-        image: juanamor8/circleguard-gateway-service:latest
+        image: stixk/circleguard-gateway-service:latest
         ports:
         - containerPort: 8087
         envFrom:

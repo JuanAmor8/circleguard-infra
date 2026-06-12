@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: juanamor8/circleguard-auth-service:latest
+        image: stixk/circleguard-auth-service:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8180
