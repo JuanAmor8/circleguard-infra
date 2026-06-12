@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init
+  namespace: circleguard-dr
+data:
+  init-databases.sql: |
+    -- Crea una base por microservicio que usa Postgres.
+    -- Se ejecuta solo en la inicializacion del data dir (emptyDir => en cada pod nuevo).
+    CREATE DATABASE circleguard_auth;
+    CREATE DATABASE circleguard_identity;
+    CREATE DATABASE circleguard_promotion;
+    CREATE DATABASE circleguard_dashboard;
+    CREATE DATABASE circleguard_form;
