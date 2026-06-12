@@ -29,7 +29,9 @@ resource "google_container_cluster" "gke" {
   remove_default_node_pool = true
   initial_node_count       = 1
 
-  min_master_version = var.kubernetes_version
+  # Sin min_master_version pineado: el canal REGULAR gestiona la versión
+  # (pinear una versión retirada, p.ej. 1.29, rompe el create). var.kubernetes_version
+  # se mantiene para compatibilidad de interfaz pero no se fuerza aquí.
 
   release_channel {
     channel = "REGULAR"
