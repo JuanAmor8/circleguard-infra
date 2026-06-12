@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: dashboard-service
-        image: stixk/circleguard-dashboard-service:latest
+        image: stixk/circleguard-dashboard-service:dev-latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8084

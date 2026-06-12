@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: notification-service
-        image: stixk/circleguard-notification-service:latest
+        image: stixk/circleguard-notification-service:dev-latest
         ports:
         - containerPort: 8082
         envFrom:
