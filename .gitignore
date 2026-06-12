@@ -17,3 +17,11 @@ secrets-local.yaml
 # OS
 Thumbs.db
 .DS_Store
+
+# Terraform
+.terraform/
+*.tfplan
+tfplan
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl

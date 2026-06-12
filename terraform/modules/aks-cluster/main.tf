@@ -22,16 +22,7 @@ resource "azurerm_subnet" "aks" {
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = var.subnet_address_prefix
-
-  delegation {
-    name = "aks-delegation"
-    service_delegation {
-      name = "Microsoft.ContainerService/managedClusters"
-      actions = [
-        "Microsoft.Network/virtualNetworks/subnets/action"
-      ]
-    }
-  }
+  # Sin delegation: AKS estándar (no vnet-integration) requiere subnet NO delegada.
 }
 
 # Azure Container Registry (opcional)
@@ -78,8 +69,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
     os_disk_type        = local.first_pool.os_disk_type
     os_disk_size_gb     = local.first_pool.os_disk_size_gb
     enable_auto_scaling = local.first_pool.enable_auto_scaling
-    min_count           = local.first_pool.min_count
-    max_count           = local.first_pool.max_count
+    # min/max deben ser null cuando autoscaling está desactivado (requisito del provider)
+    min_count = local.first_pool.enable_auto_scaling ? local.first_pool.min_count : null
+    max_count = local.first_pool.enable_auto_scaling ? local.first_pool.max_count : null
   }
 
   network_profile {
@@ -99,9 +91,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   name                  = each.value.name
   vm_size               = each.value.vm_size
   node_count            = each.value.node_count
-  min_count             = try(each.value.min_count, null)
-  max_count             = try(each.value.max_count, null)
   enable_auto_scaling   = try(each.value.enable_auto_scaling, false)
+  min_count             = try(each.value.enable_auto_scaling, false) ? try(each.value.min_count, null) : null
+  max_count             = try(each.value.enable_auto_scaling, false) ? try(each.value.max_count, null) : null
   os_disk_type          = each.value.os_disk_type
   os_disk_size_gb       = each.value.os_disk_size_gb
   vnet_subnet_id        = azurerm_subnet.aks.id
