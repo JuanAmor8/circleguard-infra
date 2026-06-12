@@ -25,7 +25,8 @@ CERT="k8s/dev/sealed-secrets-cert.pem"
 # Valores: env var si existe, si no el default mock de dev
 DB_PASSWORD="${DB_PASSWORD:-password}"
 JWT_SECRET="${JWT_SECRET:-my-super-secret-jwt-key-for-dev-only}"
-QR_SECRET="${QR_SECRET:-my-qr-secret-for-dev-only}"
+# >= 32 bytes (256 bits): JJWT rejects shorter keys for HMAC-SHA (RFC 7518 3.2)
+QR_SECRET="${QR_SECRET:-my-super-secret-qr-key-for-dev-only}"
 LDAP_BIND_PASSWORD="${LDAP_BIND_PASSWORD:-admin}"
 NEO4J_PASSWORD="${NEO4J_PASSWORD:-password}"
 VAULT_SECRET="${VAULT_SECRET:-testsecret}"
