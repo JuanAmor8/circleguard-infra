@@ -43,3 +43,16 @@ spec:
           value: "neo4j/password"
         - name: NEO4J_PLUGINS
           value: '["apoc"]'
+        - name: NEO4J_server_memory_heap_max__size
+          value: "512m"
+        - name: NEO4J_server_memory_heap_initial__size
+          value: "256m"
+        - name: NEO4J_server_memory_pagecache_size
+          value: "256m"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "150m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"

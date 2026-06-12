@@ -3,8 +3,15 @@ kind: Deployment
 metadata:
   name: promotion-service
   namespace: circleguard-dev
+  labels:
+    app: promotion-service
 spec:
-  replicas: 2
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: promotion-service
@@ -16,6 +23,7 @@ spec:
       containers:
       - name: promotion-service
         image: stixk/circleguard-promotion-service:dev-latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8088
         envFrom:
@@ -25,16 +33,23 @@ spec:
             name: circleguard-secrets
         resources:
           requests:
-            memory: "512Mi"
-            cpu: "500m"
+            memory: "256Mi"
+            cpu: "150m"
           limits:
-            memory: "1Gi"
+            memory: "768Mi"
             cpu: "1000m"
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8088
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 40
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8088
-          initialDelaySeconds: 90
           periodSeconds: 15
           timeoutSeconds: 5
           failureThreshold: 3
@@ -42,7 +57,6 @@ spec:
           httpGet:
             path: /actuator/health/readiness
             port: 8088
-          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 3
