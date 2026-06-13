@@ -1,173 +1,208 @@
 {
-  "annotations": {
-    "list": []
-  },
-  "editable": true,
-  "templating": {
-    "list": []
-  },
-  "time": {
-    "from": "now-1h",
-    "to": "now"
-  },
-  "refresh": "30s",
-  "title": "CircleGuard \u2014 gateway-service",
-  "uid": "cg-svc-gateway",
-  "tags": [
-    "circleguard",
-    "service"
-  ],
-  "schemaVersion": 39,
-  "panels": [
-    {
-      "id": 1,
-      "type": "timeseries",
-      "title": "Request rate (req/s)",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "reqps"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "sum(rate(http_server_requests_seconds_count{service=\"gateway\"}[5m]))",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
+ "annotations": {
+  "list": []
+ },
+ "editable": true,
+ "templating": {
+  "list": []
+ },
+ "time": {
+  "from": "now-1h",
+  "to": "now"
+ },
+ "refresh": "30s",
+ "title": "CircleGuard \u2014 gateway-service",
+ "uid": "cg-svc-gateway",
+ "tags": [
+  "circleguard",
+  "service"
+ ],
+ "schemaVersion": 39,
+ "panels": [
+  {
+   "id": 1,
+   "type": "timeseries",
+   "title": "Request rate (req/s)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 0
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
     },
+    "overrides": []
+   },
+   "targets": [
     {
-      "id": 2,
-      "type": "timeseries",
-      "title": "Error rate 5xx (req/s)",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "reqps"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "sum(rate(http_server_requests_seconds_count{service=\"gateway\",status=~\"5..\"}[5m]))",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "type": "timeseries",
-      "title": "Latencia P95 (s)",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 8
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"gateway\"}[5m])) by (le))",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "type": "timeseries",
-      "title": "JVM heap usado (%)",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 8
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "100 * sum(jvm_memory_used_bytes{service=\"gateway\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"gateway\",area=\"heap\"})",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "type": "timeseries",
-      "title": "CPU del proceso (%)",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 16
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "100 * process_cpu_usage{service=\"gateway\"}",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "type": "timeseries",
-      "title": "Redis cache (Lettuce) commands/s",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 16
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "sum(rate(lettuce_command_completion_seconds_count{service=\"gateway\"}[5m]))",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
+     "expr": "sum(rate(http_server_requests_seconds_count{service=\"gateway\"}[5m]))",
+     "legendFormat": "{{service}}",
+     "refId": "A"
     }
-  ]
+   ]
+  },
+  {
+   "id": 2,
+   "type": "timeseries",
+   "title": "Error rate 5xx (req/s)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 0
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "sum(rate(http_server_requests_seconds_count{service=\"gateway\",status=~\"5..\"}[5m]))",
+     "legendFormat": "{{service}}",
+     "refId": "A"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "type": "timeseries",
+   "title": "Latencia P95 (s)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "s"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"gateway\"}[5m])) by (le))",
+     "legendFormat": "{{service}}",
+     "refId": "A"
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "type": "timeseries",
+   "title": "JVM heap usado (%)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "100 * sum(jvm_memory_used_bytes{service=\"gateway\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"gateway\",area=\"heap\"})",
+     "legendFormat": "{{service}}",
+     "refId": "A"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "type": "timeseries",
+   "title": "CPU del proceso (%)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 16
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "100 * process_cpu_usage{service=\"gateway\"}",
+     "legendFormat": "{{service}}",
+     "refId": "A"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "type": "timeseries",
+   "title": "Redis cache (Lettuce) commands/s",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 16
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "sum(rate(lettuce_command_completion_seconds_count{service=\"gateway\"}[5m]))",
+     "legendFormat": "{{service}}",
+     "refId": "A"
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "type": "timeseries",
+   "title": "Validaciones de acceso (negocio)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 24
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "sum by (cloud) (gate_validations_total)",
+     "legendFormat": "total {{cloud}}",
+     "refId": "A"
+    },
+    {
+     "expr": "sum by (cloud) (gate_validations_allowed_total)",
+     "legendFormat": "allowed {{cloud}}",
+     "refId": "B"
+    },
+    {
+     "expr": "sum by (cloud) (gate_validations_denied_total)",
+     "legendFormat": "denied {{cloud}}",
+     "refId": "C"
+    }
+   ]
+  }
+ ]
 }

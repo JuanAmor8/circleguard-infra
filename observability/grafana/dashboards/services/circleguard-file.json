@@ -1,148 +1,173 @@
 {
-  "annotations": {
-    "list": []
-  },
-  "editable": true,
-  "templating": {
-    "list": []
-  },
-  "time": {
-    "from": "now-1h",
-    "to": "now"
-  },
-  "refresh": "30s",
-  "title": "CircleGuard \u2014 file-service",
-  "uid": "cg-svc-file",
-  "tags": [
-    "circleguard",
-    "service"
-  ],
-  "schemaVersion": 39,
-  "panels": [
-    {
-      "id": 1,
-      "type": "timeseries",
-      "title": "Request rate (req/s)",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "reqps"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "sum(rate(http_server_requests_seconds_count{service=\"file\"}[5m]))",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
+ "annotations": {
+  "list": []
+ },
+ "editable": true,
+ "templating": {
+  "list": []
+ },
+ "time": {
+  "from": "now-1h",
+  "to": "now"
+ },
+ "refresh": "30s",
+ "title": "CircleGuard \u2014 file-service",
+ "uid": "cg-svc-file",
+ "tags": [
+  "circleguard",
+  "service"
+ ],
+ "schemaVersion": 39,
+ "panels": [
+  {
+   "id": 1,
+   "type": "timeseries",
+   "title": "Request rate (req/s)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 0
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
     },
+    "overrides": []
+   },
+   "targets": [
     {
-      "id": 2,
-      "type": "timeseries",
-      "title": "Error rate 5xx (req/s)",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "reqps"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "sum(rate(http_server_requests_seconds_count{service=\"file\",status=~\"5..\"}[5m]))",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "type": "timeseries",
-      "title": "Latencia P95 (s)",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 8
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"file\"}[5m])) by (le))",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "type": "timeseries",
-      "title": "JVM heap usado (%)",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 8
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "100 * sum(jvm_memory_used_bytes{service=\"file\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"file\",area=\"heap\"})",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "type": "timeseries",
-      "title": "CPU del proceso (%)",
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 16
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "expr": "100 * process_cpu_usage{service=\"file\"}",
-          "legendFormat": "{{service}}",
-          "refId": "A"
-        }
-      ]
+     "expr": "sum(rate(http_server_requests_seconds_count{service=\"file\"}[5m]))",
+     "legendFormat": "{{service}}",
+     "refId": "A"
     }
-  ]
+   ]
+  },
+  {
+   "id": 2,
+   "type": "timeseries",
+   "title": "Error rate 5xx (req/s)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 0
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "sum(rate(http_server_requests_seconds_count{service=\"file\",status=~\"5..\"}[5m]))",
+     "legendFormat": "{{service}}",
+     "refId": "A"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "type": "timeseries",
+   "title": "Latencia P95 (s)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "s"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"file\"}[5m])) by (le))",
+     "legendFormat": "{{service}}",
+     "refId": "A"
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "type": "timeseries",
+   "title": "JVM heap usado (%)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "100 * sum(jvm_memory_used_bytes{service=\"file\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"file\",area=\"heap\"})",
+     "legendFormat": "{{service}}",
+     "refId": "A"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "type": "timeseries",
+   "title": "CPU del proceso (%)",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 16
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "100 * process_cpu_usage{service=\"file\"}",
+     "legendFormat": "{{service}}",
+     "refId": "A"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "type": "timeseries",
+   "title": "M\u00e9tricas de negocio",
+   "datasource": "Prometheus",
+   "gridPos": {
+    "h": 8,
+    "w": 24,
+    "x": 0,
+    "y": 24
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "expr": "sum(file_uploads_total)",
+     "legendFormat": "uploads total",
+     "refId": "A"
+    }
+   ]
+  }
+ ]
 }

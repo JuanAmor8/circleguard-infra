@@ -8,25 +8,25 @@ metadata:
 data:
   circleguard-auth.json: |
     {
+      "annotations": {
+        "list": []
+      },
+      "editable": true,
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      },
+      "refresh": "30s",
       "title": "CircleGuard \u2014 auth-service",
       "uid": "cg-svc-auth",
-      "schemaVersion": 39,
-      "editable": true,
-      "refresh": "30s",
-      "time": {
-        "from": "now-1h",
-        "to": "now"
-      },
       "tags": [
         "circleguard",
         "service"
       ],
-      "templating": {
-        "list": []
-      },
-      "annotations": {
-        "list": []
-      },
+      "schemaVersion": 39,
       "panels": [
         {
           "id": 1,
@@ -47,8 +47,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-auth-service\"}[5m]))",
-              "legendFormat": "circleguard-auth-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"auth\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -72,8 +72,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-auth-service\",status=~\"5..\"}[5m]))",
-              "legendFormat": "circleguard-auth-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"auth\",status=~\"5..\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -97,8 +97,8 @@ data:
           },
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application=\"circleguard-auth-service\"}[5m])) by (le))",
-              "legendFormat": "circleguard-auth-service",
+              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"auth\"}[5m])) by (le))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -122,8 +122,8 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * sum(jvm_memory_used_bytes{application=\"circleguard-auth-service\",area=\"heap\"}) / sum(jvm_memory_max_bytes{application=\"circleguard-auth-service\",area=\"heap\"})",
-              "legendFormat": "circleguard-auth-service",
+              "expr": "100 * sum(jvm_memory_used_bytes{service=\"auth\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"auth\",area=\"heap\"})",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -147,35 +147,75 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * process_cpu_usage{application=\"circleguard-auth-service\"}",
-              "legendFormat": "circleguard-auth-service",
+              "expr": "100 * process_cpu_usage{service=\"auth\"}",
+              "legendFormat": "{{service}}",
               "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "type": "timeseries",
+          "title": "M\u00e9tricas de negocio",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(auth_logins_total)",
+              "legendFormat": "logins total",
+              "refId": "A"
+            },
+            {
+              "expr": "sum(auth_logins_failed_total)",
+              "legendFormat": "logins failed",
+              "refId": "B"
+            },
+            {
+              "expr": "sum(auth_logins_degraded_total)",
+              "legendFormat": "logins degraded",
+              "refId": "C"
+            },
+            {
+              "expr": "sum(auth_qr_generated_total)",
+              "legendFormat": "qr generated",
+              "refId": "D"
             }
           ]
         }
       ]
     }
-  circleguard-identity.json: |
+  circleguard-dashboard.json: |
     {
-      "title": "CircleGuard \u2014 identity-service",
-      "uid": "cg-svc-identity",
-      "schemaVersion": 39,
+      "annotations": {
+        "list": []
+      },
       "editable": true,
-      "refresh": "30s",
+      "templating": {
+        "list": []
+      },
       "time": {
         "from": "now-1h",
         "to": "now"
       },
+      "refresh": "30s",
+      "title": "CircleGuard \u2014 dashboard-service",
+      "uid": "cg-svc-dashboard",
       "tags": [
         "circleguard",
         "service"
       ],
-      "templating": {
-        "list": []
-      },
-      "annotations": {
-        "list": []
-      },
+      "schemaVersion": 39,
       "panels": [
         {
           "id": 1,
@@ -196,8 +236,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-identity-service\"}[5m]))",
-              "legendFormat": "circleguard-identity-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"dashboard\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -221,8 +261,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-identity-service\",status=~\"5..\"}[5m]))",
-              "legendFormat": "circleguard-identity-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"dashboard\",status=~\"5..\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -246,8 +286,8 @@ data:
           },
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application=\"circleguard-identity-service\"}[5m])) by (le))",
-              "legendFormat": "circleguard-identity-service",
+              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"dashboard\"}[5m])) by (le))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -271,8 +311,8 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * sum(jvm_memory_used_bytes{application=\"circleguard-identity-service\",area=\"heap\"}) / sum(jvm_memory_max_bytes{application=\"circleguard-identity-service\",area=\"heap\"})",
-              "legendFormat": "circleguard-identity-service",
+              "expr": "100 * sum(jvm_memory_used_bytes{service=\"dashboard\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"dashboard\",area=\"heap\"})",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -296,35 +336,70 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * process_cpu_usage{application=\"circleguard-identity-service\"}",
-              "legendFormat": "circleguard-identity-service",
+              "expr": "100 * process_cpu_usage{service=\"dashboard\"}",
+              "legendFormat": "{{service}}",
               "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "type": "timeseries",
+          "title": "M\u00e9tricas de negocio",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(dashboard_analytics_queries_total)",
+              "legendFormat": "analytics queries",
+              "refId": "A"
+            },
+            {
+              "expr": "sum(dashboard_cache_hits_total)",
+              "legendFormat": "cache hits",
+              "refId": "B"
+            },
+            {
+              "expr": "sum(dashboard_cache_misses_total)",
+              "legendFormat": "cache misses",
+              "refId": "C"
             }
           ]
         }
       ]
     }
-  circleguard-gateway.json: |
+  circleguard-file.json: |
     {
-      "title": "CircleGuard \u2014 gateway-service",
-      "uid": "cg-svc-gateway",
-      "schemaVersion": 39,
+      "annotations": {
+        "list": []
+      },
       "editable": true,
-      "refresh": "30s",
+      "templating": {
+        "list": []
+      },
       "time": {
         "from": "now-1h",
         "to": "now"
       },
+      "refresh": "30s",
+      "title": "CircleGuard \u2014 file-service",
+      "uid": "cg-svc-file",
       "tags": [
         "circleguard",
         "service"
       ],
-      "templating": {
-        "list": []
-      },
-      "annotations": {
-        "list": []
-      },
+      "schemaVersion": 39,
       "panels": [
         {
           "id": 1,
@@ -345,8 +420,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-gateway-service\"}[5m]))",
-              "legendFormat": "circleguard-gateway-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"file\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -370,8 +445,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-gateway-service\",status=~\"5..\"}[5m]))",
-              "legendFormat": "circleguard-gateway-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"file\",status=~\"5..\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -395,8 +470,8 @@ data:
           },
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application=\"circleguard-gateway-service\"}[5m])) by (le))",
-              "legendFormat": "circleguard-gateway-service",
+              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"file\"}[5m])) by (le))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -420,8 +495,8 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * sum(jvm_memory_used_bytes{application=\"circleguard-gateway-service\",area=\"heap\"}) / sum(jvm_memory_max_bytes{application=\"circleguard-gateway-service\",area=\"heap\"})",
-              "legendFormat": "circleguard-gateway-service",
+              "expr": "100 * sum(jvm_memory_used_bytes{service=\"file\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"file\",area=\"heap\"})",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -445,8 +520,33 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * process_cpu_usage{application=\"circleguard-gateway-service\"}",
-              "legendFormat": "circleguard-gateway-service",
+              "expr": "100 * process_cpu_usage{service=\"file\"}",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "type": "timeseries",
+          "title": "M\u00e9tricas de negocio",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(file_uploads_total)",
+              "legendFormat": "uploads total",
               "refId": "A"
             }
           ]
@@ -455,25 +555,25 @@ data:
     }
   circleguard-form.json: |
     {
-      "title": "CircleGuard \u2014 form-service",
-      "uid": "cg-svc-form",
-      "schemaVersion": 39,
+      "annotations": {
+        "list": []
+      },
       "editable": true,
-      "refresh": "30s",
+      "templating": {
+        "list": []
+      },
       "time": {
         "from": "now-1h",
         "to": "now"
       },
+      "refresh": "30s",
+      "title": "CircleGuard \u2014 form-service",
+      "uid": "cg-svc-form",
       "tags": [
         "circleguard",
         "service"
       ],
-      "templating": {
-        "list": []
-      },
-      "annotations": {
-        "list": []
-      },
+      "schemaVersion": 39,
       "panels": [
         {
           "id": 1,
@@ -494,8 +594,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-form-service\"}[5m]))",
-              "legendFormat": "circleguard-form-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"form\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -519,8 +619,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-form-service\",status=~\"5..\"}[5m]))",
-              "legendFormat": "circleguard-form-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"form\",status=~\"5..\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -544,8 +644,8 @@ data:
           },
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application=\"circleguard-form-service\"}[5m])) by (le))",
-              "legendFormat": "circleguard-form-service",
+              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"form\"}[5m])) by (le))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -569,8 +669,8 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * sum(jvm_memory_used_bytes{application=\"circleguard-form-service\",area=\"heap\"}) / sum(jvm_memory_max_bytes{application=\"circleguard-form-service\",area=\"heap\"})",
-              "legendFormat": "circleguard-form-service",
+              "expr": "100 * sum(jvm_memory_used_bytes{service=\"form\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"form\",area=\"heap\"})",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -594,9 +694,462 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * process_cpu_usage{application=\"circleguard-form-service\"}",
-              "legendFormat": "circleguard-form-service",
+              "expr": "100 * process_cpu_usage{service=\"form\"}",
+              "legendFormat": "{{service}}",
               "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "type": "timeseries",
+          "title": "Kafka producer: mensajes enviados/s",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 16
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(spring_kafka_template_seconds_count{service=\"form\"}[5m]))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "type": "timeseries",
+          "title": "M\u00e9tricas de negocio",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(form_surveys_submitted_total)",
+              "legendFormat": "surveys submitted",
+              "refId": "A"
+            },
+            {
+              "expr": "sum(form_certificates_validated_total)",
+              "legendFormat": "certificates validated",
+              "refId": "B"
+            },
+            {
+              "expr": "sum(form_questionnaires_active)",
+              "legendFormat": "questionnaires active",
+              "refId": "C"
+            }
+          ]
+        }
+      ]
+    }
+  circleguard-gateway.json: |
+    {
+      "annotations": {
+        "list": []
+      },
+      "editable": true,
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      },
+      "refresh": "30s",
+      "title": "CircleGuard \u2014 gateway-service",
+      "uid": "cg-svc-gateway",
+      "tags": [
+        "circleguard",
+        "service"
+      ],
+      "schemaVersion": 39,
+      "panels": [
+        {
+          "id": 1,
+          "type": "timeseries",
+          "title": "Request rate (req/s)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"gateway\"}[5m]))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "type": "timeseries",
+          "title": "Error rate 5xx (req/s)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"gateway\",status=~\"5..\"}[5m]))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "type": "timeseries",
+          "title": "Latencia P95 (s)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"gateway\"}[5m])) by (le))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "type": "timeseries",
+          "title": "JVM heap usado (%)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "100 * sum(jvm_memory_used_bytes{service=\"gateway\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"gateway\",area=\"heap\"})",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "type": "timeseries",
+          "title": "CPU del proceso (%)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 16
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "100 * process_cpu_usage{service=\"gateway\"}",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "type": "timeseries",
+          "title": "Redis cache (Lettuce) commands/s",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 16
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(lettuce_command_completion_seconds_count{service=\"gateway\"}[5m]))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "type": "timeseries",
+          "title": "Validaciones de acceso (negocio)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum by (cloud) (gate_validations_total)",
+              "legendFormat": "total {{cloud}}",
+              "refId": "A"
+            },
+            {
+              "expr": "sum by (cloud) (gate_validations_allowed_total)",
+              "legendFormat": "allowed {{cloud}}",
+              "refId": "B"
+            },
+            {
+              "expr": "sum by (cloud) (gate_validations_denied_total)",
+              "legendFormat": "denied {{cloud}}",
+              "refId": "C"
+            }
+          ]
+        }
+      ]
+    }
+  circleguard-identity.json: |
+    {
+      "annotations": {
+        "list": []
+      },
+      "editable": true,
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      },
+      "refresh": "30s",
+      "title": "CircleGuard \u2014 identity-service",
+      "uid": "cg-svc-identity",
+      "tags": [
+        "circleguard",
+        "service"
+      ],
+      "schemaVersion": 39,
+      "panels": [
+        {
+          "id": 1,
+          "type": "timeseries",
+          "title": "Request rate (req/s)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"identity\"}[5m]))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "type": "timeseries",
+          "title": "Error rate 5xx (req/s)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"identity\",status=~\"5..\"}[5m]))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "type": "timeseries",
+          "title": "Latencia P95 (s)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"identity\"}[5m])) by (le))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "type": "timeseries",
+          "title": "JVM heap usado (%)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "100 * sum(jvm_memory_used_bytes{service=\"identity\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"identity\",area=\"heap\"})",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "type": "timeseries",
+          "title": "CPU del proceso (%)",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 16
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "100 * process_cpu_usage{service=\"identity\"}",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "type": "timeseries",
+          "title": "M\u00e9tricas de negocio",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(identity_mappings_created_total)",
+              "legendFormat": "mappings created",
+              "refId": "A"
+            },
+            {
+              "expr": "sum(identity_visitors_registered_total)",
+              "legendFormat": "visitors registered",
+              "refId": "B"
+            },
+            {
+              "expr": "sum(identity_lookups_executed_total)",
+              "legendFormat": "lookups executed",
+              "refId": "C"
             }
           ]
         }
@@ -604,25 +1157,25 @@ data:
     }
   circleguard-notification.json: |
     {
-      "title": "CircleGuard \u2014 notification-service",
-      "uid": "cg-svc-notification",
-      "schemaVersion": 39,
+      "annotations": {
+        "list": []
+      },
       "editable": true,
-      "refresh": "30s",
+      "templating": {
+        "list": []
+      },
       "time": {
         "from": "now-1h",
         "to": "now"
       },
+      "refresh": "30s",
+      "title": "CircleGuard \u2014 notification-service",
+      "uid": "cg-svc-notification",
       "tags": [
         "circleguard",
         "service"
       ],
-      "templating": {
-        "list": []
-      },
-      "annotations": {
-        "list": []
-      },
+      "schemaVersion": 39,
       "panels": [
         {
           "id": 1,
@@ -643,8 +1196,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-notification-service\"}[5m]))",
-              "legendFormat": "circleguard-notification-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"notification\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -668,8 +1221,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-notification-service\",status=~\"5..\"}[5m]))",
-              "legendFormat": "circleguard-notification-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"notification\",status=~\"5..\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -693,8 +1246,8 @@ data:
           },
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application=\"circleguard-notification-service\"}[5m])) by (le))",
-              "legendFormat": "circleguard-notification-service",
+              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"notification\"}[5m])) by (le))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -718,8 +1271,8 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * sum(jvm_memory_used_bytes{application=\"circleguard-notification-service\",area=\"heap\"}) / sum(jvm_memory_max_bytes{application=\"circleguard-notification-service\",area=\"heap\"})",
-              "legendFormat": "circleguard-notification-service",
+              "expr": "100 * sum(jvm_memory_used_bytes{service=\"notification\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"notification\",area=\"heap\"})",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -743,9 +1296,79 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * process_cpu_usage{application=\"circleguard-notification-service\"}",
-              "legendFormat": "circleguard-notification-service",
+              "expr": "100 * process_cpu_usage{service=\"notification\"}",
+              "legendFormat": "{{service}}",
               "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "type": "timeseries",
+          "title": "Kafka listener: mensajes consumidos/s",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 16
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(rate(spring_kafka_listener_seconds_count{service=\"notification\"}[5m]))",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "type": "timeseries",
+          "title": "M\u00e9tricas de negocio",
+          "datasource": "Prometheus",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "expr": "sum(notifications_sent_total)",
+              "legendFormat": "sent total",
+              "refId": "A"
+            },
+            {
+              "expr": "sum(notifications_sent_email_total)",
+              "legendFormat": "email",
+              "refId": "B"
+            },
+            {
+              "expr": "sum(notifications_sent_sms_total)",
+              "legendFormat": "sms",
+              "refId": "C"
+            },
+            {
+              "expr": "sum(notifications_sent_push_total)",
+              "legendFormat": "push",
+              "refId": "D"
+            },
+            {
+              "expr": "sum(notifications_broadcast_total)",
+              "legendFormat": "broadcast",
+              "refId": "E"
             }
           ]
         }
@@ -753,25 +1376,25 @@ data:
     }
   circleguard-promotion.json: |
     {
-      "title": "CircleGuard \u2014 promotion-service",
-      "uid": "cg-svc-promotion",
-      "schemaVersion": 39,
+      "annotations": {
+        "list": []
+      },
       "editable": true,
-      "refresh": "30s",
+      "templating": {
+        "list": []
+      },
       "time": {
         "from": "now-1h",
         "to": "now"
       },
+      "refresh": "30s",
+      "title": "CircleGuard \u2014 promotion-service",
+      "uid": "cg-svc-promotion",
       "tags": [
         "circleguard",
         "service"
       ],
-      "templating": {
-        "list": []
-      },
-      "annotations": {
-        "list": []
-      },
+      "schemaVersion": 39,
       "panels": [
         {
           "id": 1,
@@ -792,8 +1415,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-promotion-service\"}[5m]))",
-              "legendFormat": "circleguard-promotion-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"promotion\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -817,8 +1440,8 @@ data:
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-promotion-service\",status=~\"5..\"}[5m]))",
-              "legendFormat": "circleguard-promotion-service",
+              "expr": "sum(rate(http_server_requests_seconds_count{service=\"promotion\",status=~\"5..\"}[5m]))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -842,8 +1465,8 @@ data:
           },
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application=\"circleguard-promotion-service\"}[5m])) by (le))",
-              "legendFormat": "circleguard-promotion-service",
+              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{service=\"promotion\"}[5m])) by (le))",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -867,8 +1490,8 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * sum(jvm_memory_used_bytes{application=\"circleguard-promotion-service\",area=\"heap\"}) / sum(jvm_memory_max_bytes{application=\"circleguard-promotion-service\",area=\"heap\"})",
-              "legendFormat": "circleguard-promotion-service",
+              "expr": "100 * sum(jvm_memory_used_bytes{service=\"promotion\",area=\"heap\"}) / sum(jvm_memory_max_bytes{service=\"promotion\",area=\"heap\"})",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -892,8 +1515,8 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * process_cpu_usage{application=\"circleguard-promotion-service\"}",
-              "legendFormat": "circleguard-promotion-service",
+              "expr": "100 * process_cpu_usage{service=\"promotion\"}",
+              "legendFormat": "{{service}}",
               "refId": "A"
             }
           ]
@@ -922,302 +1545,49 @@ data:
               "refId": "A"
             }
           ]
-        }
-      ]
-    }
-  circleguard-dashboard.json: |
-    {
-      "title": "CircleGuard \u2014 dashboard-service",
-      "uid": "cg-svc-dashboard",
-      "schemaVersion": 39,
-      "editable": true,
-      "refresh": "30s",
-      "time": {
-        "from": "now-1h",
-        "to": "now"
-      },
-      "tags": [
-        "circleguard",
-        "service"
-      ],
-      "templating": {
-        "list": []
-      },
-      "annotations": {
-        "list": []
-      },
-      "panels": [
+        },
         {
-          "id": 1,
+          "id": 7,
           "type": "timeseries",
-          "title": "Request rate (req/s)",
+          "title": "M\u00e9tricas de negocio",
           "datasource": "Prometheus",
           "gridPos": {
             "h": 8,
-            "w": 12,
+            "w": 24,
             "x": 0,
-            "y": 0
+            "y": 24
           },
           "fieldConfig": {
             "defaults": {
-              "unit": "reqps"
+              "unit": "short"
             },
             "overrides": []
           },
           "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-dashboard-service\"}[5m]))",
-              "legendFormat": "circleguard-dashboard-service",
+              "expr": "sum(promotion_health_reports_total)",
+              "legendFormat": "health reports",
               "refId": "A"
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "type": "timeseries",
-          "title": "Error rate 5xx (req/s)",
-          "datasource": "Prometheus",
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 0
-          },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "reqps"
             },
-            "overrides": []
-          },
-          "targets": [
             {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-dashboard-service\",status=~\"5..\"}[5m]))",
-              "legendFormat": "circleguard-dashboard-service",
-              "refId": "A"
-            }
-          ]
-        },
-        {
-          "id": 3,
-          "type": "timeseries",
-          "title": "Latencia P95 (s)",
-          "datasource": "Prometheus",
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 8
-          },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "s"
+              "expr": "sum(promotion_encounters_reported_total)",
+              "legendFormat": "encounters reported",
+              "refId": "B"
             },
-            "overrides": []
-          },
-          "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application=\"circleguard-dashboard-service\"}[5m])) by (le))",
-              "legendFormat": "circleguard-dashboard-service",
-              "refId": "A"
-            }
-          ]
-        },
-        {
-          "id": 4,
-          "type": "timeseries",
-          "title": "JVM heap usado (%)",
-          "datasource": "Prometheus",
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 8
-          },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "percent"
+              "expr": "sum(promotion_circles_created_total)",
+              "legendFormat": "circles created",
+              "refId": "C"
             },
-            "overrides": []
-          },
-          "targets": [
             {
-              "expr": "100 * sum(jvm_memory_used_bytes{application=\"circleguard-dashboard-service\",area=\"heap\"}) / sum(jvm_memory_max_bytes{application=\"circleguard-dashboard-service\",area=\"heap\"})",
-              "legendFormat": "circleguard-dashboard-service",
-              "refId": "A"
-            }
-          ]
-        },
-        {
-          "id": 5,
-          "type": "timeseries",
-          "title": "CPU del proceso (%)",
-          "datasource": "Prometheus",
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 16
-          },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "percent"
+              "expr": "sum(promotion_fencing_events_total)",
+              "legendFormat": "fencing events",
+              "refId": "D"
             },
-            "overrides": []
-          },
-          "targets": [
             {
-              "expr": "100 * process_cpu_usage{application=\"circleguard-dashboard-service\"}",
-              "legendFormat": "circleguard-dashboard-service",
-              "refId": "A"
-            }
-          ]
-        }
-      ]
-    }
-  circleguard-file.json: |
-    {
-      "title": "CircleGuard \u2014 file-service",
-      "uid": "cg-svc-file",
-      "schemaVersion": 39,
-      "editable": true,
-      "refresh": "30s",
-      "time": {
-        "from": "now-1h",
-        "to": "now"
-      },
-      "tags": [
-        "circleguard",
-        "service"
-      ],
-      "templating": {
-        "list": []
-      },
-      "annotations": {
-        "list": []
-      },
-      "panels": [
-        {
-          "id": 1,
-          "type": "timeseries",
-          "title": "Request rate (req/s)",
-          "datasource": "Prometheus",
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 0
-          },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "reqps"
-            },
-            "overrides": []
-          },
-          "targets": [
-            {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-file-service\"}[5m]))",
-              "legendFormat": "circleguard-file-service",
-              "refId": "A"
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "type": "timeseries",
-          "title": "Error rate 5xx (req/s)",
-          "datasource": "Prometheus",
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 0
-          },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "reqps"
-            },
-            "overrides": []
-          },
-          "targets": [
-            {
-              "expr": "sum(rate(http_server_requests_seconds_count{application=\"circleguard-file-service\",status=~\"5..\"}[5m]))",
-              "legendFormat": "circleguard-file-service",
-              "refId": "A"
-            }
-          ]
-        },
-        {
-          "id": 3,
-          "type": "timeseries",
-          "title": "Latencia P95 (s)",
-          "datasource": "Prometheus",
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 8
-          },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "s"
-            },
-            "overrides": []
-          },
-          "targets": [
-            {
-              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application=\"circleguard-file-service\"}[5m])) by (le))",
-              "legendFormat": "circleguard-file-service",
-              "refId": "A"
-            }
-          ]
-        },
-        {
-          "id": 4,
-          "type": "timeseries",
-          "title": "JVM heap usado (%)",
-          "datasource": "Prometheus",
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 8
-          },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "targets": [
-            {
-              "expr": "100 * sum(jvm_memory_used_bytes{application=\"circleguard-file-service\",area=\"heap\"}) / sum(jvm_memory_max_bytes{application=\"circleguard-file-service\",area=\"heap\"})",
-              "legendFormat": "circleguard-file-service",
-              "refId": "A"
-            }
-          ]
-        },
-        {
-          "id": 5,
-          "type": "timeseries",
-          "title": "CPU del proceso (%)",
-          "datasource": "Prometheus",
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 16
-          },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "targets": [
-            {
-              "expr": "100 * process_cpu_usage{application=\"circleguard-file-service\"}",
-              "legendFormat": "circleguard-file-service",
-              "refId": "A"
+              "expr": "sum(promotion_active_cases)",
+              "legendFormat": "active cases",
+              "refId": "E"
             }
           ]
         }
